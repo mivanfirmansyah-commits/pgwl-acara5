@@ -40,15 +40,35 @@ class PointsController extends Controller
             'geometri_point' => 'required',
             'nama' => 'required',
             'deskripsi' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'geometri_point.required' => 'Geometri point harus diisi.',
             'nama.required' => 'Nama Titik harus diisi.',
             'deskripsi.required' => 'Deskripsi Titik harus diisi.',
+            'image.image' => 'File yang diunggah harus berupa gambar.',
+            'image.mimes' => 'Format gambar yang diizinkan adalah: jpeg, png, jpg, gif.',
+            'image.max' => 'Ukuran gambar tidak boleh lebih dari 2MB.',
         ]);
+
+        // buat folder untuk menyimpan gambar jika belum ada
+        if (!is_dir('storage/images')) {
+            mkdir('./storage/images', 0777);
+        }
+
+        // Get the uploaded image file
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name_image = time() . "_point." . strtolower($image->getClientOriginalExtension());
+            $image->move('storage/images', $name_image);
+        } else {
+            $name_image = null;
+        }
+
         $data = [
             'geom' => $request->geometri_point,
             'name' => $request->nama,
             'description' => $request->deskripsi,
+            'image' => $name_image,
         ];
 
         // simpan data ke database
