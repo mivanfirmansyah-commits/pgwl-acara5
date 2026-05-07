@@ -107,6 +107,16 @@ class PolygonController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Mencari nama file gambar berdasarkan ID polygon
+        $image = $this->polygon->find($id)->image;
+
+        // Hapus data dari database
+        if ($this->polygon->destroy($id)) {
+            // kembali ke halaman sebelumnya dengan pesan sukses
+            return redirect()->back()->with('success', 'Polygon berhasil dihapus!');
+        }
+
+        // kembali ke halaman sebelumnya dengan pesan error
+        return redirect()->back()->with('error', 'Gagal menghapus polygon!');
     }
 }

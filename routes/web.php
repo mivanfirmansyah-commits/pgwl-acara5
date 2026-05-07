@@ -23,10 +23,19 @@ Route::view('/tentang', 'tentang', ['title' => 'Tentang'])->name('tentang');
 // Points
 Route::post('/points', [PointsController::class, 'store'])->name('points.store');
 
+// Route untuk menghapus titik
+Route::delete('/delete-points/{id}', [PointsController::class, 'destroy'])->name('points.delete');
+
 // Polyline
 Route::post('/polyline', [PolylinesController::class, 'store'])->name('polyline.store');
 
+// Route untuk menghapus garis
+Route::delete('/delete-polyline/{id}', [PolylinesController::class, 'destroy'])->name('polyline.delete');
+
 // Polygon
 Route::post('/polygon', [PolygonController::class, 'store'])->name('polygon.store');
+
+// Route untuk menghapus polygon
+Route::delete('/delete-polygon/{id}', [PolygonController::class, 'destroy'])->name('polygon.delete');
 
 // require __DIR__ . '/settings.php';

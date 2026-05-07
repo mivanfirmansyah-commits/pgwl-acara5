@@ -110,6 +110,16 @@ class PointsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Mencari nama file gambar berdasarkan ID titik
+        $image = $this->points->find($id)->image;
+
+        // Hapus data dari database
+        if ($this->points->destroy($id)) {
+            // kembali ke halaman sebelumnya dengan pesan sukses
+            return redirect()->back()->with('success', 'Titik berhasil dihapus!');
+        }
+
+        // kembali ke halaman sebelumnya dengan pesan error
+        return redirect()->back()->with('error', 'Gagal menghapus titik!');
     }
 }

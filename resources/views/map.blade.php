@@ -46,10 +46,11 @@
                         <div class="mb-3">
                             <label for="image" class="form-label">Image</label>
                             <input type="file" class="form-control" id="image" name="image"
-                            onchange="document.getElementById('preview-image-point').src = window.URL.createObjectURL(this.files[0])">
+                                onchange="document.getElementById('preview-image-point').src = window.URL.createObjectURL(this.files[0])">
                         </div>
                         <div class="mb-3">
-                            <img src="" alt="" id="preview-image-point" class="img-thumbnail" width="400">
+                            <img src="" alt="" id="preview-image-point" class="img-thumbnail"
+                                width="400">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -89,10 +90,11 @@
                         <div class="mb-3">
                             <label for="image" class="form-label">Image</label>
                             <input type="file" class="form-control" id="image" name="image"
-                            onchange="document.getElementById('preview-image-polyline').src = window.URL.createObjectURL(this.files[0])">
+                                onchange="document.getElementById('preview-image-polyline').src = window.URL.createObjectURL(this.files[0])">
                         </div>
                         <div class="mb-3">
-                            <img src="" alt="" id="preview-image-polyline" class="img-thumbnail" width="400">
+                            <img src="" alt="" id="preview-image-polyline" class="img-thumbnail"
+                                width="400">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -122,7 +124,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Isikan Deskripsi Polygon" rows="3"></textarea>
+                            <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Isikan Deskripsi Polygon"
+                                rows="3"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="geometri_polygon" class="form-label">Geometri</label>
@@ -132,10 +135,11 @@
                         <div class="mb-3">
                             <label for="image" class="form-label">Image</label>
                             <input type="file" class="form-control" id="image" name="image"
-                            onchange="document.getElementById('preview-image-polygon').src = window.URL.createObjectURL(this.files[0])">
+                                onchange="document.getElementById('preview-image-polygon').src = window.URL.createObjectURL(this.files[0])">
                         </div>
                         <div class="mb-3">
-                            <img src="" alt="" id="preview-image-polygon" class="img-thumbnail" width="400">
+                            <img src="" alt="" id="preview-image-polygon" class="img-thumbnail"
+                                width="400">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -260,24 +264,34 @@
             // Style
 
             // onEachFeature
-            onEachFeature: function (feature, layer) {
+            onEachFeature: function(feature, layer) {
+                // Route delete point
+                var routedelete = "{{ route('points.delete', ':id') }}";
+                routedelete = routedelete.replace(':id', feature.properties.id);
+
                 // variable popup content
                 var popup_content = "Nama: " + feature.properties.name + "<br>" +
                     "Deskripsi: " + feature.properties.description + "<br>" +
-                    "Dibuat:" + feature.properties.created_at + "<br>"+
-                    "<img src='{{ asset('storage/images/') }}/" + feature.properties.image + "' alt='' class='img-thumbnail' width='400'>"
-                    ;
+                    "Dibuat:" + feature.properties.created_at + "<br>" +
+                    "<img src='{{ asset('storage/images/') }}/" + feature.properties.image +
+                    "' alt='' class='img-thumbnail' width='400'>" +
+                    "<br><br>" +
+                    "<form action='" + routedelete + "' method='post'>" +
+                    '@csrf' +
+                    '@method('DELETE')' +
+                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>"
+                "</form>";
 
                 layer.on({
-                    click: function (e) {
+                    click: function(e) {
                         points.bindPopup(popup_content);
                     },
                 });
             },
 
         });
-        $.getJSON("{{route('geojson_points')}} ",
-            function (data) {
+        $.getJSON("{{ route('geojson_points') }} ",
+            function(data) {
                 points.addData(data);
                 map.addLayer(points);
             });
@@ -285,72 +299,92 @@
         // GeoJSON Polylines
         var polylines = L.geoJSON(null, {
             // Style
-            style: function (feature) {
+            style: function(feature) {
                 return {
                     color: 'blue',
                     weight: 3
                 };
-        },
+            },
 
-                // onEachFeature
-                onEachFeature: function (feature, layer) {
-                    // variable popup content
-                    var popup_content = "Nama: " + feature.properties.name + "<br>" +
-                        "Deskripsi: " + feature.properties.description + "<br>" +
-                        "Dibuat:" + feature.properties.created_at + "<br>"+
-                        "<img src='{{ asset('storage/images/') }}/" + feature.properties.image + "' alt='' class='img-thumbnail' width='400'>"
-                        ;
+            // onEachFeature
+            onEachFeature: function(feature, layer) {
+                // Route delete polyline
+                var routedelete = "{{ route('polyline.delete', ':id') }}";
+                routedelete = routedelete.replace(':id', feature.properties.id);
 
-                    layer.on({
-                        click: function (e) {
-                            polylines.bindPopup(popup_content);
-                        },
-                    });
-                },
+                // variable popup content
+                var popup_content = "Nama: " + feature.properties.name + "<br>" +
+                    "Deskripsi: " + feature.properties.description + "<br>" +
+                    "Dibuat:" + feature.properties.created_at + "<br>" +
+                    "<img src='{{ asset('storage/images/') }}/" + feature.properties.image +
+                    "' alt='' class='img-thumbnail' width='400'>"+
+                    "<br><br>" +
+                    "<form action='" + routedelete + "' method='post'>" +
+                    '@csrf' +
+                    '@method('DELETE')' +
+                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>"
+                    "</form>"
+                    ;
+
+                layer.on({
+                    click: function(e) {
+                        polylines.bindPopup(popup_content);
+                    },
+                });
+            },
 
         });
-        $.getJSON("{{route('geojson_polyline')}} ",
-            function (data) {
+        $.getJSON("{{ route('geojson_polyline') }} ",
+            function(data) {
                 polylines.addData(data);
                 map.addLayer(polylines);
             });
 
-            // GeoJSON Polygons
+        // GeoJSON Polygons
         var polygons = L.geoJSON(null, {
             // Style
-            style: function (feature) {
+            style: function(feature) {
                 return {
                     color: 'green',
                     weight: 3
                 };
             },
 
-                // onEachFeature
-                onEachFeature: function (feature, layer) {
-                    // variable popup content
-                    var popup_content = "Nama: " + feature.properties.name + "<br>" +
-                        "Deskripsi: " + feature.properties.description + "<br>" +
-                        "Dibuat:" + feature.properties.created_at + "<br>"+
-                        "<img src='{{ asset('storage/images/') }}/" + feature.properties.image + "' alt='' class='img-thumbnail' width='400'>"
-                        ;
+            // onEachFeature
+            onEachFeature: function(feature, layer) {
+                // Route delete polygon
+                var routedelete = "{{ route('polygon.delete', ':id') }}";
+                routedelete = routedelete.replace(':id', feature.properties.id);
 
-                    layer.on({
-                        click: function (e) {
-                            polygons.bindPopup(popup_content);
-                        },
-                    });
-                },
-                
+                // variable popup content
+                var popup_content = "Nama: " + feature.properties.name + "<br>" +
+                    "Deskripsi: " + feature.properties.description + "<br>" +
+                    "Dibuat:" + feature.properties.created_at + "<br>" +
+                    "<img src='{{ asset('storage/images/') }}/" + feature.properties.image +
+                    "' alt='' class='img-thumbnail' width='400'>"+
+                    "<br><br>" +
+                    "<form action='" + routedelete + "' method='post'>" +
+                    '@csrf' +
+                    '@method('DELETE')' +
+                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>"
+                    "</form>";
+
+                layer.on({
+                    click: function(e) {
+                        polygons.bindPopup(popup_content);
+                    },
+                });
+            },
+
         });
-        $.getJSON("{{route('geojson_polygon')}} ",
-            function (data) {
+        $.getJSON("{{ route('geojson_polygon') }} ",
+            function(data) {
                 polygons.addData(data);
                 map.addLayer(polygons);
             });
 
-            // Control Layer
-        var baseMaps = {
-        };
+        // Control Layer
+        var baseMaps = {};
 
         var overlayMaps = {
             "Points": points,
