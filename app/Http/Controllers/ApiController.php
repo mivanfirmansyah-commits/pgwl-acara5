@@ -18,9 +18,14 @@ class ApiController extends Controller
 
     public function geojson_points()
     {
-        $this->points = $this->points->geojson_points();
+        $points = $this->points->geojson_points();
+    return response()->json($points, 200, [], JSON_NUMERIC_CHECK);
+    }
 
-        return response()->json($this->points, 200, [], JSON_NUMERIC_CHECK);
+    public function geojson_point($id)
+    {
+        $point = $this->points->geojson_point($id);
+        return response()->json($point, 200, [], JSON_NUMERIC_CHECK);
     }
 
     public function geojson_polyline()

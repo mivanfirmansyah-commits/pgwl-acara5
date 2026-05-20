@@ -269,6 +269,10 @@
                 var routedelete = "{{ route('points.delete', ':id') }}";
                 routedelete = routedelete.replace(':id', feature.properties.id);
 
+                // Route edit point
+                var routeedit = "{{ route('points.edit', ':id') }}";
+                routeedit = routeedit.replace(':id', feature.properties.id);
+
                 // variable popup content
                 var popup_content = "Nama: " + feature.properties.name + "<br>" +
                     "Deskripsi: " + feature.properties.description + "<br>" +
@@ -276,11 +280,18 @@
                     "<img src='{{ asset('storage/images/') }}/" + feature.properties.image +
                     "' alt='' class='img-thumbnail' width='400'>" +
                     "<br><br>" +
+                    "<div class='row'>" +
+                    "<div class='col-6'>" +
                     "<form action='" + routedelete + "' method='post'>" +
                     '@csrf' +
                     '@method('DELETE')' +
-                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>"
-                "</form>";
+                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>" +
+                    "</form>" +
+                    "</div>" +
+                    "<div class='col-6'>" +
+                    "<a href='" + routeedit + "' class='btn btn-warning btn-sm' title='Edit Point'><i class='fa-solid fa-pen-to-square'></i></a>" +
+                    "</div>" +
+                    "</div>";
 
                 layer.on({
                     click: function(e) {
@@ -317,14 +328,13 @@
                     "Deskripsi: " + feature.properties.description + "<br>" +
                     "Dibuat:" + feature.properties.created_at + "<br>" +
                     "<img src='{{ asset('storage/images/') }}/" + feature.properties.image +
-                    "' alt='' class='img-thumbnail' width='400'>"+
+                    "' alt='' class='img-thumbnail' width='400'>" +
                     "<br><br>" +
                     "<form action='" + routedelete + "' method='post'>" +
                     '@csrf' +
                     '@method('DELETE')' +
                     "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>"
-                    "</form>"
-                    ;
+                "</form>";
 
                 layer.on({
                     click: function(e) {
@@ -361,13 +371,13 @@
                     "Deskripsi: " + feature.properties.description + "<br>" +
                     "Dibuat:" + feature.properties.created_at + "<br>" +
                     "<img src='{{ asset('storage/images/') }}/" + feature.properties.image +
-                    "' alt='' class='img-thumbnail' width='400'>"+
+                    "' alt='' class='img-thumbnail' width='400'>" +
                     "<br><br>" +
                     "<form action='" + routedelete + "' method='post'>" +
                     '@csrf' +
                     '@method('DELETE')' +
                     "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>"
-                    "</form>";
+                "</form>";
 
                 layer.on({
                     click: function(e) {

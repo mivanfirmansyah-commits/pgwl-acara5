@@ -10,17 +10,16 @@ class pointsModel extends Model
     protected $table = 'points';
     protected $guarded = ['id'];
 
+    // Fungsi untuk mengambil SEMUA titik
     public function geojson_points()
     {
-        $points = $this->select(DB::raw('id, ST_AsGeoJSON(geom) as
-        geojson, name, description, image, created_at, updated_at'))->get();
+        $points = $this->select(DB::raw('id, ST_AsGeoJSON(geom) as geojson, name, description, image, created_at, updated_at'))->get();
 
         $geojson = [
             'type' => 'FeatureCollection',
             'features' => []
         ];
 
-        // Perulangan setiap titik untuk membuat fitur GeoJSON
         foreach ($points as $p) {
             $feature = [
                 'type' => 'Feature',
@@ -34,9 +33,45 @@ class pointsModel extends Model
                     'updated_at' => $p->updated_at
                 ]
             ];
-
             array_push($geojson['features'], $feature);
         }
+
+        return $geojson;
+    }
+
+    // Fungsi untuk mengambil SATU titik (SUDAH DIPERBAIKI)
+    public function geojson_point($id)
+    {
+        $point = $this->select(DB::raw('id, ST_AsGeoJSON(geom) as geojson, name, description, image, created_at, updated_at'))
+            ->where('id', $id)
+            ->first();
+
+        // Jika data tidak ditemukan
+        if (!$point) {
+            return [
+                'type' => 'FeatureCollection',
+                'features' => []
+            ];
+        }
+
+        // Langsung buat format GeoJSON tanpa perulangan (foreach dihapus)
+        $geojson = [
+            'type' => 'FeatureCollection',
+            'features' => [
+                [
+                    'type' => 'Feature',
+                    'geometry' => json_decode($point->geojson),
+                    'properties' => [
+                        'id' => $point->id,
+                        'name' => $point->name,
+                        'description' => $point->description,
+                        'image' => $point->image,
+                        'created_at' => $point->created_at,
+                        'updated_at' => $point->updated_at
+                    ]
+                ]
+            ]
+        ];
 
         return $geojson;
     }

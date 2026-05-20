@@ -26,6 +26,10 @@ Route::post('/points', [PointsController::class, 'store'])->name('points.store')
 // Route untuk menghapus titik
 Route::delete('/delete-points/{id}', [PointsController::class, 'destroy'])->name('points.delete');
 
+// Route untuk mengedit titik
+Route::get('/edit-points/{id}', [PointsController::class, 'edit'])->name('points.edit');
+Route::put('/update-points/{id}', [PointsController::class, 'update'])->name('points.update');
+
 // Polyline
 Route::post('/polyline', [PolylinesController::class, 'store'])->name('polyline.store');
 
