@@ -322,6 +322,9 @@
                 // Route delete polyline
                 var routedelete = "{{ route('polyline.delete', ':id') }}";
                 routedelete = routedelete.replace(':id', feature.properties.id);
+                // Route edit polyline
+                var routeedit = "{{ route('polyline.edit', ':id') }}";
+                routeedit = routeedit.replace(':id', feature.properties.id);
 
                 // variable popup content
                 var popup_content = "Nama: " + feature.properties.name + "<br>" +
@@ -330,11 +333,18 @@
                     "<img src='{{ asset('storage/images/') }}/" + feature.properties.image +
                     "' alt='' class='img-thumbnail' width='400'>" +
                     "<br><br>" +
+                    "<div class='row'>" +
+                    "<div class='col-6'>" +
                     "<form action='" + routedelete + "' method='post'>" +
                     '@csrf' +
                     '@method('DELETE')' +
-                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>"
-                "</form>";
+                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>" +
+                    "</form>" +
+                    "</div>" +
+                    "<div class='col-6'>" +
+                    "<a href='" + routeedit + "' class='btn btn-warning btn-sm' title='Edit Polyline'><i class='fa-solid fa-pen-to-square'></i></a>" +
+                    "</div>" +
+                    "</div>";
 
                 layer.on({
                     click: function(e) {
@@ -342,9 +352,8 @@
                     },
                 });
             },
-
         });
-        $.getJSON("{{ route('geojson_polyline') }} ",
+        $.getJSON("{{ route('geojson_polylines') }} ",
             function(data) {
                 polylines.addData(data);
                 map.addLayer(polylines);
@@ -366,6 +375,10 @@
                 var routedelete = "{{ route('polygon.delete', ':id') }}";
                 routedelete = routedelete.replace(':id', feature.properties.id);
 
+                // Route edit polygon
+                var routeedit = "{{ route('polygon.edit', ':id') }}";
+                routeedit = routeedit.replace(':id', feature.properties.id);
+
                 // variable popup content
                 var popup_content = "Nama: " + feature.properties.name + "<br>" +
                     "Deskripsi: " + feature.properties.description + "<br>" +
@@ -376,8 +389,13 @@
                     "<form action='" + routedelete + "' method='post'>" +
                     '@csrf' +
                     '@method('DELETE')' +
-                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>"
-                "</form>";
+                    "<button type='submit'class='btn btn-sm btn-danger' title='Delete Feature' onclick='return confirm(\"Tenan e?\")'><i class='fa-regular fa-trash-can'></i></button>" +
+                    "</form>" +
+                    "</div>" +
+                    "<div class='col-6'>" +
+                    "<a href='" + routeedit + "' class='btn btn-warning btn-sm' title='Edit Polygon'><i class='fa-solid fa-pen-to-square'></i></a>" +
+                    "</div>" +
+                    "</div>";
 
                 layer.on({
                     click: function(e) {
@@ -387,7 +405,7 @@
             },
 
         });
-        $.getJSON("{{ route('geojson_polygon') }} ",
+        $.getJSON("{{ route('geojson_polygons') }} ",
             function(data) {
                 polygons.addData(data);
                 map.addLayer(polygons);

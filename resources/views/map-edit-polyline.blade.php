@@ -23,25 +23,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Titik</h5>
+                    <h5 class="modal-title">Edit Polyline</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('points.update', $id) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('polyline.update', $id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama</label>
                             <input type="text" class="form-control" id="nama" name="nama"
-                                placeholder="Isikan Nama Titik">
+                                placeholder="Isikan Nama Polyline">
                         </div>
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Isikan Deskripsi Titik" rows="3"></textarea>
+                            <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Isikan Deskripsi Polyline" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="geometri" class="form-label">Geometri</label>
-                            <textarea class="form-control" id="geometri" name="geometri" placeholder="Isikan Geometri Titik" rows="3"></textarea>
+                            <textarea class="form-control" id="geometri" name="geometri" placeholder="Isikan Geometri Polyline" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="image" class="form-label">Image</label>
@@ -133,8 +133,8 @@
             });
         });
 
-        // GeoJSON Points
-        var points = L.geoJSON(null, {
+        // GeoJSON Polyline
+        var polylines = L.geoJSON(null, {
             // Style
 
             // onEachFeature
@@ -159,12 +159,12 @@
                     },
                 });
             },
-
         });
-        $.getJSON("{{ route('geojson_point', $id) }} ",
+
+        $.getJSON("{{ route('geojson_polyline', $id) }} ",
             function(data) {
-                points.addData(data);
-                map.addLayer(points);
+                polylines.addData(data);
+                map.addLayer(polylines);
             });
     </script>
 @endsection

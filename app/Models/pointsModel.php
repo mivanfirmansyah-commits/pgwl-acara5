@@ -13,7 +13,8 @@ class pointsModel extends Model
     // Fungsi untuk mengambil SEMUA titik
     public function geojson_points()
     {
-        $points = $this->select(DB::raw('id, ST_AsGeoJSON(geom) as geojson, name, description, image, created_at, updated_at'))->get();
+        $points = $this->select(DB::raw('id, ST_AsGeoJSON(geom) as
+        geojson, name, description, image, created_at, updated_at'))->get();
 
         $geojson = [
             'type' => 'FeatureCollection',
@@ -39,12 +40,11 @@ class pointsModel extends Model
         return $geojson;
     }
 
-    // Fungsi untuk mengambil SATU titik (SUDAH DIPERBAIKI)
+    // Fungsi untuk mengambil SATU titik
     public function geojson_point($id)
     {
         $point = $this->select(DB::raw('id, ST_AsGeoJSON(geom) as geojson, name, description, image, created_at, updated_at'))
-            ->where('id', $id)
-            ->first();
+            ->where('id', $id)->first();
 
         // Jika data tidak ditemukan
         if (!$point) {
