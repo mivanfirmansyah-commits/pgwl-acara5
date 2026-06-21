@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+// Import Model Anda
 use App\Models\PointsModel;
 use App\Models\PolygonModel;
 use App\Models\PolylinesModel;
@@ -9,26 +11,19 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    public function __construct()
-    {
-        $this->points = new PointsModel();
-        $this->polylines = new PolylinesModel();
-        $this->polygon = new PolygonModel();
-        $this->user = new User();
-    }
+    // Kita tidak perlu menggunakan __construct dan 'new Model' lagi agar kode lebih bersih & aman
 
     public function landingpage()
     {
         $data = [
             'title' => 'PGWL',
-            'points_count' => $this->points->count(),
-            'polylines_count' => $this->polylines->count(),
-            'polygon_count' => $this->polygon->count(),
-            'user_count' => $this->user->count(),
+            'points_count' => PointsModel::count(),
+            'polylines_count' => PolylinesModel::count(),
+            'polygon_count' => PolygonModel::count(),
+            'user_count' => User::count(),
         ];
         return view('home', $data);
     }
-
 
     public function map()
     {
@@ -40,11 +35,12 @@ class PageController extends Controller
 
     public function tabel()
     {
+        // Mengambil data langsung menggunakan Method Static ::all() bawaan Laravel
         $data = [
             'title' => 'Tabel',
-            'points' => $this->points->all(),
-            'polylines' => $this->polylines->all(),
-            'polygon' => $this->polygon->all(),
+            'points' => PointsModel::all(),
+            'polylines' => PolylinesModel::all(),
+            'polygons' => PolygonModel::all(), // DIUBAH menjadi 'polygons' agar sesuai dengan @foreach ($polygons ...) di Blade
         ];
         return view('table', $data);
     }

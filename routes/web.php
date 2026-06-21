@@ -16,7 +16,7 @@ Route::view('/map', 'map', ['title' => 'Peta Wisata'])
 ->middleware(['auth', 'verified'])
 ->name('peta');
 
-Route::get('/table', [PointsController::class, 'index'])->name('table');
+Route::get('/table', [PageController::class, 'tabel'])->name('table');
 
 Route::view('/tentang', 'tentang', ['title' => 'Tentang'])->name('tentang');
 
